@@ -13,7 +13,11 @@ const props = defineProps({
 <template>
   <v-card elevation="0" class="h-100 border-gray rounded-lg">
     <div class="thumbnail">
-      <CategoryChip :category="data?.category" class="chip-absolute" />
+      <CategoryChip
+        :category="data?.category"
+        size="small"
+        class="chip-absolute"
+      />
       <v-img cover :src="data?.thumbnail" />
     </div>
     <div class="product-metadata pa-4 d-flex flex-column">

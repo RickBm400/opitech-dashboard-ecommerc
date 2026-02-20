@@ -4,7 +4,7 @@ import { categories } from '../constants/productCategories';
 import CategoryChip from './CategoryChip.vue';
 
 const searchCriteria = ref<string>('');
-const selectedCategory = ref<string>('cdscsd');
+const selectedCategory = ref<string>('');
 </script>
 <template>
   <v-row>
@@ -44,7 +44,8 @@ const selectedCategory = ref<string>('cdscsd');
             :value="selectedCategory"
             @click="selectedCategory = key"
           >
-            <CategoryChip :category="key" />
+            {{key}}
+            <CategoryChip :category="key" size="small" />
           </v-list-item>
         </v-list>
       </v-menu>

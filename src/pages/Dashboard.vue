@@ -1,21 +1,38 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { getAllProducts } from '../services/product.client';
+import { getAllProducts } from '../services/product.service';
 import ProductCard from '../components/ProductCard.vue';
 import NavBar from '../components/NavBar.vue';
-import type { Product, ProductsResponsePaginated } from '../types/product.type';
+import type {
+  Product,
+  ProductsRequestInput,
+  ProductsResponsePaginated,
+} from '../types/product.type';
 import _ from 'lodash';
 
 const page = ref<number>(1);
+const skip = ref<number>(0);
 const totalPages = ref<number>(1);
 let productList = ref<Array<Array<Product>>>([[]]);
 
-onMounted(async () => {
-  const {products, total, limit}: ProductsResponsePaginated = await getAllProducts();
-  console.log(products);
+const getProducts = async (payload?: ProductsRequestInput) => {
+  const { products, total }: ProductsResponsePaginated =
+    await getAllProducts(payload);
+
   productList.value = _.chunk(products, 4);
-  totalPages.value = Math.ceil(total / limit);
-  console.log(productList.value);
+  totalPages.value = Math.ceil(total / 8);
+  console.log(totalPages.value)
+};
+
+const updatePage = async (newPage: number) => {
+  page.value = newPage;
+  skip.value = (newPage - 1) * 8;
+  console.log(page.value, skip.value);
+  await getProducts({ skip: skip.value });
+};
+
+onMounted(async () => {
+  await getProducts();
 });
 </script>
 
@@ -36,13 +53,14 @@ onMounted(async () => {
       </v-row>
 
       <!-- Pagination footer -->
-      <v-row align="end">
-        <v-col cols="12">
+      <v-row justify="end">
+        <v-col cols="6">
           <v-pagination
             v-model="page"
             :length="totalPages"
             class="my-4"
             density="compact"
+            @update:model-value="updatePage"
           />
         </v-col>
       </v-row>

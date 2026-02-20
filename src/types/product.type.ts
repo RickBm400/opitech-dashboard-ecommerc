@@ -50,3 +50,10 @@ export interface ProductsResponsePaginated {
   total: number;
   products: Product[];
 }
+
+export interface ProductsRequestInput {
+  limit?: number;
+  skip?: number;
+  search?: string;
+  category?: string;
+}
