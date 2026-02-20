@@ -1,6 +1,6 @@
 # Opitech Dashboard Ecommerce
 
-Frontend e-commerce dashboard desarrollado con **Vue 3**, **TypeScript** y **Vite**, que integra la API pública de DummyJSON para la gestión de productos.
+Frontend e-commerce dashboard desarrollado con **Vue 3**, **TypeScript** y **Vite**, que integra la API pública de [DummyJSON](https://dummyjson.com/docs/products#products-category) para la gestión de productos.
 
 ## Stack Tecnológico
 
@@ -55,7 +55,7 @@ npm run preview
 
 - Catálogo de productos con filtrado por categoría
 - Búsqueda de productos
-- Paginación configurable
+- Paginación
 - Tipado fuerte con TypeScript
 - Interfaz moderna con Vuetify
 - Arquitectura modular y escalable
