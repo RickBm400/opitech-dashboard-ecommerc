@@ -10,8 +10,6 @@ const routes = [
   },
 ];
 
-console.log(routes);
-
 export const router = createRouter({
   history: createMemoryHistory(),
   routes,
