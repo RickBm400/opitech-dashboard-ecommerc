@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { getAllProducts } from '../services/product.service';
 import ProductCard from '../components/ProductCard.vue';
 import NavBar from '../components/NavBar.vue';
@@ -9,11 +9,14 @@ import type {
   ProductsResponsePaginated,
 } from '../types/product.type';
 import _ from 'lodash';
+import { useDebounce } from '../composables/debounce';
 
+let productList = ref<Array<Array<Product>>>([[]]);
 const page = ref<number>(1);
 const skip = ref<number>(0);
+const searchCriteria = ref<string>('');
+const selectedCategory = ref<string>('');
 const totalPages = ref<number>(1);
-let productList = ref<Array<Array<Product>>>([[]]);
 
 const getProducts = async (payload?: ProductsRequestInput) => {
   const { products, total }: ProductsResponsePaginated =
@@ -21,15 +24,21 @@ const getProducts = async (payload?: ProductsRequestInput) => {
 
   productList.value = _.chunk(products, 4);
   totalPages.value = Math.ceil(total / 8);
-  console.log(totalPages.value)
+  console.log(totalPages.value);
 };
 
 const updatePage = async (newPage: number) => {
   page.value = newPage;
   skip.value = (newPage - 1) * 8;
   console.log(page.value, skip.value);
-  await getProducts({ skip: skip.value });
+  await getProducts({ skip: skip.value, search: searchCriteria.value });
 };
+
+const debounceSearch = useDebounce(getProducts, 1000);
+
+watch(searchCriteria, (value) => {
+  debounceSearch({search: value})
+})
 
 onMounted(async () => {
   await getProducts();
@@ -43,7 +52,10 @@ onMounted(async () => {
         <h1 class="mb-4">E-Commerce</h1>
       </div>
       <!-- Navigation bar -->
-      <NavBar />
+      <NavBar
+        @update:searchCriteria="searchCriteria = $event"
+        @update:selectedCategory="selectedCategory = $event"
+      />
 
       <!-- Product card grid -->
       <v-row v-for="(row, index) of productList" :key="index">

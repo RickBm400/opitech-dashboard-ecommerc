@@ -8,9 +8,10 @@ import type {
 export const getAllProducts = async (
   payload?: ProductsRequestInput,
 ): Promise<ProductsResponsePaginated | any> => {
-  const searchParam = `/search?q=${payload?.search}`;
+  const baseRequestUrl = payload?.search ? `/products/search` : `/products`;
+  const searchParam = payload?.search ? `?q=${payload?.search}` : '';
   try {
-    const response = await apiClient.get(`/products`, {
+    const response = await apiClient.get(`${baseRequestUrl}${searchParam}`, {
       params: {
         limit: payload?.limit || 8,
         skip: payload?.skip || 0,

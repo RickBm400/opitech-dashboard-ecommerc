@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { categories } from '../constants/productCategories';
 import CategoryChip from './CategoryChip.vue';
+const emit = defineEmits(['update:searchCriteria', 'update:selectedCategory']);
 
-const searchCriteria = ref<string>('');
-const selectedCategory = ref<string>('');
+// const props = defineProps({
+//   searchCriteria: {
+//     type: String,
+//     required: false,
+//   },
+//   selectedCategory: {
+//     type: String,
+//     required: false,
+//   },
+// });
+
 </script>
 <template>
   <v-row>
@@ -19,7 +28,7 @@ const selectedCategory = ref<string>('');
         density="compact"
         label="Search products..."
         variant="outlined"
-        v-model="searchCriteria"
+        @update:model-value="emit('update:searchCriteria', $event)"
       ></v-text-field>
     </v-col>
     <v-col cols="2">
@@ -41,10 +50,8 @@ const selectedCategory = ref<string>('');
             v-for="(_, key) in categories"
             :key="key"
             class="cursor-pointer"
-            :value="selectedCategory"
-            @click="selectedCategory = key"
+            @click="emit('update:selectedCategory', key)"
           >
-            {{key}}
             <CategoryChip :category="key" size="small" />
           </v-list-item>
         </v-list>
