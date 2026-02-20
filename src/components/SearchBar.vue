@@ -31,7 +31,7 @@ const emit = defineEmits(['update:searchCriteria', 'update:selectedCategory']);
         @update:model-value="emit('update:searchCriteria', $event)"
       ></v-text-field>
     </v-col>
-    <v-col cols="2">
+    <v-col cols="4">
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-btn

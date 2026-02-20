@@ -12,7 +12,7 @@ export const getAllProducts = async (
   const categoryParam = payload?.category
     ? `/category/${payload.category}`
     : '';
-  const searchParam = payload?.search ? `?q=${payload?.search}` : '';
+  const searchParam = payload?.search ? `/search?q=${payload?.search}` : '';
 
   const url = categoryParam
     ? `${baseRequestUrl}${categoryParam}`
