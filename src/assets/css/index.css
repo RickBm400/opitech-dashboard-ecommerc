@@ -13,3 +13,12 @@ body {
   font-style: normal;
   line-height: 1.5;
 }
+
+
+.border-gray {
+  border: 0.9px solid #00000017;
+}
+
+.cursor-pointer {
+    cursor:pointer
+}
