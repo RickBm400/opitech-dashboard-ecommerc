@@ -26,25 +26,30 @@ const getProducts = async (payload?: ProductsRequestInput) => {
 
   productList.value = _.chunk(products, 4);
   totalPages.value = Math.ceil(total / 8);
-  console.log(totalPages.value);
 };
+
+const debounceSearch = useDebounce(getProducts, 1000);
 
 const updatePage = async (newPage: number) => {
   page.value = newPage;
   skip.value = (newPage - 1) * 8;
   console.log(page.value, skip.value);
-  await getProducts({ skip: skip.value, search: searchCriteria.value, category: selectedCategory.value });
+  await getProducts({
+    skip: skip.value,
+    search: searchCriteria.value,
+    category: selectedCategory.value,
+  });
 };
 
-const debounceSearch = useDebounce(getProducts, 1000);
-
 watch(searchCriteria, (value) => {
-  debounceSearch({search: value})
-})
+  page.value = 1;
+  skip.value = 0;
+  debounceSearch({ search: value,  });
+});
 
 watch(selectedCategory, async (value) => {
   await getProducts({ search: searchCriteria.value, category: value });
-})
+});
 
 onMounted(async () => {
   await getProducts();
@@ -59,13 +64,21 @@ onMounted(async () => {
       </div>
       <!-- Navigation bar -->
       <SearchBar
+        :selected-category="selectedCategory"
         @update:searchCriteria="searchCriteria = $event"
         @update:selectedCategory="selectedCategory = $event"
       />
 
       <!-- Product card grid -->
       <v-row v-for="(row, index) of productList" :key="index">
-        <v-col v-for="product of row" :key="product.id + '_' + index" cols="3">
+        <v-col
+          v-for="product of row"
+          :key="product.id + '_' + index"
+          cols="12"
+          sm="4"
+          md="3"
+          lg="3"
+        >
           <ProductCard :data="product" @click="productSelected = product" />
         </v-col>
       </v-row>
@@ -83,6 +96,9 @@ onMounted(async () => {
         </v-col>
       </v-row>
     </v-container>
-    <ProductDialog :data="productSelected!" @update:close="productSelected = $event" />
+    <ProductDialog
+      :data="productSelected!"
+      @update:close="productSelected = $event"
+    />
   </div>
 </template>

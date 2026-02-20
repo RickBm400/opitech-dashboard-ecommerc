@@ -3,17 +3,12 @@ import { categories } from '../constants/productCategories';
 import CategoryChip from './CategoryChip.vue';
 const emit = defineEmits(['update:searchCriteria', 'update:selectedCategory']);
 
-// const props = defineProps({
-//   searchCriteria: {
-//     type: String,
-//     required: false,
-//   },
-//   selectedCategory: {
-//     type: String,
-//     required: false,
-//   },
-// });
-
+const props = defineProps({
+  selectedCategory: {
+    type: String,
+    required: false,
+  },
+});
 </script>
 <template>
   <v-row>
@@ -24,6 +19,7 @@ const emit = defineEmits(['update:searchCriteria', 'update:selectedCategory']);
         rounded
         hide-details
         single-line
+        clearable
         append-inner-icon="mdi-magnify"
         density="compact"
         label="Search products..."
@@ -31,7 +27,7 @@ const emit = defineEmits(['update:searchCriteria', 'update:selectedCategory']);
         @update:model-value="emit('update:searchCriteria', $event)"
       ></v-text-field>
     </v-col>
-    <v-col cols="4">
+    <v-col cols="5">
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-btn
@@ -44,6 +40,16 @@ const emit = defineEmits(['update:searchCriteria', 'update:selectedCategory']);
             Categories
             <v-icon class="pl-2">mdi-filter</v-icon>
           </v-btn>
+          <v-btn
+            elevation="0"
+            v-if="selectedCategory"
+            density="compact"
+            size="small"
+            icon="mdi-close"
+            color="red"
+            class="ml-2"
+            @click="emit('update:selectedCategory', '')"
+          ></v-btn>
         </template>
         <v-list height="300px">
           <v-list-item
