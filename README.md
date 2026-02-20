@@ -4,7 +4,7 @@ Frontend e-commerce dashboard desarrollado con **Vue 3**, **TypeScript** y **Vit
 
 ## Stack Tecnológico
 
-- **Framework**: Vue 3 con `<script setup>` SFC
+- **Framework**: Vue 3 con Composition API
 - **Lenguaje**: TypeScript 5.9
 - **Build Tool**: Vite 7.3
 - **Enrutamiento**: Vue Router 4.6
