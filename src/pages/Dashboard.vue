@@ -31,13 +31,17 @@ const updatePage = async (newPage: number) => {
   page.value = newPage;
   skip.value = (newPage - 1) * 8;
   console.log(page.value, skip.value);
-  await getProducts({ skip: skip.value, search: searchCriteria.value });
+  await getProducts({ skip: skip.value, search: searchCriteria.value, category: selectedCategory.value });
 };
 
 const debounceSearch = useDebounce(getProducts, 1000);
 
 watch(searchCriteria, (value) => {
   debounceSearch({search: value})
+})
+
+watch(selectedCategory, async (value) => {
+  await getProducts({ search: searchCriteria.value, category: value });
 })
 
 onMounted(async () => {
